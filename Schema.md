@@ -19,16 +19,14 @@ Redis is the main data store for Kansas. Indexes, where mentioned are created us
 
 * **Type** Hash
 * **Path** [prefix]:kansas:policy:[id]
-* **Indexes** `ownerId`, 
+* **Indexes** none
 
 #### Properties
 
 * `string` **id** Unique id.
 * `string` **name** Policy name.
-* `integer` **maxApps** Maximum number of apps.
-* `integer` **maxTokensPerApp** Maximum tokens per app.
-* `integer` **requestLimit** Maximum requests limit per given period (now only month).
-* `string` **ownerId** Arbitrary string that identifies the owner.
+* `integer` **maxTokens** Maximum number of tokens.
+* `integer` **limit** Maximum requests limit per given period (now only month).
 * `string` **createdOn** Date in ISO 8601 Extended Format.
 
 
