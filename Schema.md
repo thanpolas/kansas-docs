@@ -5,7 +5,7 @@ Redis is the main data store for Kansas. Indexes, where mentioned are created us
 ## Tokens Store
 
 * **Type** Hash
-* **Path** [prefix]:token:[token]
+* **Path** [prefix]:kansas:token:[token]
 * **Indexes** `ownerId`
 
 #### Properties
@@ -18,7 +18,7 @@ Redis is the main data store for Kansas. Indexes, where mentioned are created us
 ## Policies Store
 
 * **Type** Hash
-* **Path** [prefix]:policy:[id]
+* **Path** [prefix]:kansas:policy:[id]
 * **Indexes** `ownerId`, 
 
 #### Properties
@@ -35,7 +35,7 @@ Redis is the main data store for Kansas. Indexes, where mentioned are created us
 ## Usage Store
 
 * **Type** Hash
-* **Path** [prefix]:[yyyy-mm]:[token]
+* **Path** [prefix]:kansas:[yyyy-mm]:[token]
 * **Indexes** none.
 
 #### Properties
