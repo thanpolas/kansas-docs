@@ -77,7 +77,7 @@
 
   Policies are stored in memory. After many iterations it became apparent that this is the most convenient way to work with policies. You define and maintain them inside your application, they are shared between multiple cores and exist in the memory saving on needless database reads. After all, typically an application is not expected to have more than 10 policies.
 
-  ### Creating policies
+### Creating policies
 
   > `api.policy.create(options)`
   >
