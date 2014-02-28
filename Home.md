@@ -25,7 +25,7 @@
   api.setup({/* options */});
   ```
 
-  ### Available Options
+### Available Options
 
   * **prefix** `string` *Optional* A string to prefix all keys on Redis.
   * **redis** `Object` *Optional* Redis connection options
