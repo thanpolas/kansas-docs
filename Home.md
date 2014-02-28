@@ -49,15 +49,15 @@
   });
   ```
 
-  **[[⬆]](#TOC)**
+**[[⬆]](#TOC)**
 
-## <a name='connect'>Connecting to Database</a>
+## <a name='connect'>Connecting to Redis</a>
 
   > `api.create()` No arguments.
   >
   > *Returns* `Promise` A Promise.
 
-  Before you start a connection Kansas will refuse to perform any task. Connecting to redis is plain Promise returning method, `connect()`.
+  Before you start a connection Kansas will refuse to perform any task. Connecting to Redis is a plain Promise returning method, `connect()`.
 
   ```js
   var kansas = require('kansas');
