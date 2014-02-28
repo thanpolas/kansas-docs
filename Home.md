@@ -100,7 +100,7 @@
   });
   ```
 
-  ### Reading a Policy
+### Reading a Policy
 
   > `api.policy.get(policyName)`
   >
@@ -112,7 +112,7 @@
   var policyItem = api.policy.get('free');
   ```
 
-  ### Checking a Policy exists
+### Checking a Policy exists
 
   > `api.policy.has(policyName)`
   >
@@ -125,7 +125,7 @@
   ```
 
 
-  ### Change an Owner's policy
+### Change an Owner's policy
 
   > `api.policy.change(options)`
   >
