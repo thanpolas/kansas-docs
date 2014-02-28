@@ -54,7 +54,8 @@
 ## <a name='connect'>Connecting to Database</a>
 
   > `api.create()` No arguments.
-  > *Returns* A Promise.
+  >
+  > *Returns* `Promise` A Promise.
 
   Before you start a connection Kansas will refuse to perform any task. Connecting to redis is plain Promise returning method, `connect()`.
 
@@ -66,7 +67,7 @@
   api.connect().then(function() {
     console.log('Connected!');
   }).catch(function(err){
-    console.log('Opts, something went wrong:', err);
+    console.error('Opts, something went wrong:', err);
   });
   ```
   **[[⬆]](#TOC)**
@@ -78,6 +79,17 @@
 
   ### Creating policies
 
+  > `api.policy.create(options)`
+  >
+  >    * **options** `Object` A dictionary with the following options.
+  >       * **name** `string` The policy's name, uniquely identifying it.
+>       * **maxTokens** `number` Maximum number of tokens each owner is allowed to have.
+>       * **limit** `number` The maximum number of API calls (units) per period.
+  >
+  > *Returns* `Object` The Policy Item.
+
+
+
   To create a policy you need to define three parameters:
 
   ```js
@@ -88,20 +100,100 @@
   });
   ```
 
-  ###
+  ### Reading a Policy
+
+  > `api.policy.get(policyName)`
+  >
+  >    * **policyName** `string` The policy name to fetch.
+  >
+  > *Returns* `Object` The Policy Item.
+
+  ```js
+  var policyItem = api.policy.get('free');
+  ```
+
+  ### Checking a Policy exists
+
+  > `api.policy.has(policyName)`
+  >
+  >    * **policyName** `string` The policy name to fetch.
+  >
+  > *Returns* `boolean` Yes or no.
+
+  ```js
+  var policyExists = api.policy.has('free');
+  ```
+
+
+  ### Change an Owner's policy
+
+  > `api.policy.change(options)`
+  >
+  >    * **options** `Object` A dictionary with the following key/value pairs:
+  >      * **ownerId** `string` The owner's id.
+  >      * **policyName** `string` The new policy.
+  >
+  > *Returns* `Promise` A promise.
+
+  You'll typically use this when an owner upgrades or downgrades to a new plan. Beware, the usage units will reset to the Policy's limits.
+
+  ```js
+  api.policy.change({
+    ownerId: 'a-unique-id'
+    policyName: 'basic',
+  }).then(function() {
+    console.log('It Worked!');
+  }).catch(function(err) {
+    console.error('Uhhhhh duh?', err);
+  });
+  ```
+
 
   **[[⬆]](#TOC)**
 
 
 ## <a name='creating-tokens'>Creating Tokens</a>
 
-  To create a token you need an `ownerId` and a `policyName`.
+  > `api.create(options)`
+  >
+  >    * **options** `Object` A dictionary with the following key/value pairs:
+  >      * **ownerId** `string` The owner's id.
+  >      * **policyName** `string` The new policy.
+  >
+  > *Returns* `Promise(tokenItem)` A promise returning the *tokenItem* an *Object*.
+
+  Creates a tokens and populates usage keys and indexes.
 
 
   ```js
-  api.create({
-    policyName: 'free',
-    ownerId: 'a-unique-id',
+  api.policy.change({
+    ownerId: 'a-unique-id'
+    policyName: 'basic',
+  }).then(function(tokenItem) {
+    console.log('It Worked!', tokenItem);
+    console.log('Here is the token:', tokenItem.token);
+  }).catch(function(err) {
+    console.error('OH NO!', err);
+  });
+  ```
+  **[[⬆]](#TOC)**
+
+## <a name='consuming-tokens'>Consuming Tokens</a>
+
+  > `api.consume(token, optUnits)`
+  >
+  >    * **token** `string` The token to consume.
+  >    * **optUnits=** `number` *Optional* Optionally define how many units to consume.
+  > *Returns* `Promise(remaining)` A promise returning the remaining units a *number*.
+
+  Will consume a unit and return the remaining units.
+
+  ```js
+  api.consume('token')
+  .then(function(remaining) {
+    console.log('Units remaining:', remaining);
+  }).catch(function(err) {
+    console.error('No more units!', err);
   });
   ```
   **[[⬆]](#TOC)**
