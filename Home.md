@@ -49,7 +49,7 @@
   });
   ```
 
-**[[⬆]](#TOC)**
+**[[⬆]](#toc)**
 
 ## <a name='connect'>Connecting to Redis</a>
 
