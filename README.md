@@ -17,8 +17,7 @@
     1. [Fetching Tokens](#get-tokens)
     1. [Consuming Tokens](#consuming-tokens)
     1. [The Token Item](#tokens-item)
-  1. [Managing Tokens](#managing-tokens)
-  1. [Populating](#populating)
+  1. [Kansas Middleware](#middleware)
   1. [Kansas Events](#events)
   1. [Database Maintenance](#maintenance)
     1. [Prepopulating Usage Keys](#maintenance-prepopulate)
@@ -106,8 +105,6 @@
 >       * **limit** `number` The maximum number of API calls (units) per period.
   >
   > *Returns* `Object` [The Policy Item](#policies-item).
-
-
 
   To create a policy you need to define three parameters:
 
@@ -202,6 +199,8 @@
 
   > ### api.create(options)
   >
+  > `api.create` is an alias to `api.set`
+  >
   >    * **options** `Object` A dictionary with the following key/value pairs:
   >      * **ownerId** `string` The owner's id.
   >      * **policyName** `string` The new policy.
@@ -209,7 +208,6 @@
   > *Returns* `Promise(tokenItem)` A promise returning the [*tokenItem* an *Object*](#tokens-item).
 
   Creates a tokens and populates usage keys and indexes.
-
 
   ```js
   api.create({
@@ -222,6 +220,10 @@
     console.error('OH NO!', err);
   });
   ```
+
+  > This method has [Before / After Middleware](#middleware).
+
+
   **[[⬆]](#TOC)**
 
 ### <a name='get-tokens'>Fetching Tokens</a>
@@ -296,6 +298,55 @@
     createdOn: '2014-03-01T18:12:15.711Z';
   };
   ```
+
+  **[[⬆]](#TOC)**
+
+
+
+## <a name='middleware'>Kansas Middleware</a>
+
+Kansas uses the [Middlewarify package](https://github.com/thanpolas/middlewarify) to apply the middleware pattern to its methods. More specifically the [Before/After type of middleware](https://github.com/thanpolas/middlewarify#using-the-before--after-middleware-type) has been applied to the following methods:
+
+  * api.set()
+  * api.get()
+  * api.del()
+  * api.consume()
+  * api.getByOwnerId()
+  * api.policy.change()
+
+Each of these methods has the Before/After methods so you can add corresponding middleware. All middleware get the same arguments, all *After* middleware receive an extra argument which is the result of the main middleware resolution.
+
+```js
+api.set.before(function(params) {
+  console.log(params.ownerId); // prints 'hip'
+});
+
+api.set.after(function(params, tokenItem) {
+  console.log(tokenItem.token); // the generated token
+});
+
+
+api.create({
+  ownerId: 'hip',
+  policyName: 'free',
+});
+```
+
+To pass control asynchronously from a middleware you need to return a Promise:
+
+```js
+api.set.before(function(params) {
+  return new Promise(function(resolve, reject) {
+    performAsyncFunction(function(err) {
+        if (err) { return reject(err); }
+
+        // pass control
+        resolve();
+    });
+
+  });
+});
+```
 
   **[[⬆]](#TOC)**
 
