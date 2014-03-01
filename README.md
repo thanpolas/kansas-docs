@@ -71,7 +71,7 @@
 
 ## <a name='connect'>Connecting to Redis</a>
 
-  > `api.connect()` No arguments.
+  > ### api.connect() No arguments.
   >
   > *Returns* `Promise` A Promise.
 
@@ -97,7 +97,7 @@
 
 ### <a name='policies-creating'>Creating policies</a>
 
-  > `api.policy.create(options)`
+  > ### api.policy.create(options)
   >
   >    * **options** `Object` A dictionary with the following options.
   >       * **name** `string` The policy's name, uniquely identifying it.
@@ -123,7 +123,7 @@
 
 ### <a name='policies-read'>Reading a Policy</a>
 
-  > `api.policy.get(policyName)`
+  > ### api.policy.get(policyName)
   >
   >    * **policyName** `string` The policy name to fetch.
   >
@@ -137,7 +137,7 @@
 
 ### <a name='policies-has'>Checking a Policy exists</a>
 
-  > `api.policy.has(policyName)`
+  > ### api.policy.has(policyName)
   >
   >    * **policyName** `string` The policy name to fetch.
   >
@@ -152,7 +152,7 @@
 
 ### <a name='policies-change'>Change an Owner's policy</a>
 
-  > `api.policy.change(options)`
+  > ### api.policy.change(options)
   >
   >    * **options** `Object` A dictionary with the following key/value pairs:
   >      * **ownerId** `string` The owner's id.
@@ -199,7 +199,7 @@
 
 ### <a name='creating-tokens'>Creating Tokens</a>
 
-  > `api.create(options)`
+  > ### api.create(options)
   >
   >    * **options** `Object` A dictionary with the following key/value pairs:
   >      * **ownerId** `string` The owner's id.
@@ -225,7 +225,7 @@
 
 ### <a name='get-tokens'>Fetching Tokens</a>
 
-  > `api.get(token)`
+  > ### api.get(token)
   >
   >    * **token** `string` The token's string.
   > *Returns* `Promise(tokenItem)` A promise returning the [*tokenItem* an *Object*](#tokens-item).
@@ -248,7 +248,7 @@
 
 ### <a name='consuming-tokens'>Consuming Tokens</a>
 
-  > `api.consume(token, optUnits)`
+  > ### api.consume(token, optUnits)
   >
   >    * **token** `string` The token to consume.
   >    * **optUnits=** `number` *Optional* Optionally define how many units to consume.
@@ -318,7 +318,7 @@ The following Database maintenance tasks are available under the `db` namespace.
 
   Each time a token is created Kansas will populate the usage keys for the current period (month) and the next period (month). By design there is no built-in way to prepopulate the usage keys with each passing month. This operation can potentially be very costly and you should have the responsibility and control of when and where it's run.
 
-  > `api.db.prepopulate()`
+  > ### api.db.prepopulate()
   >
   > *Returns* `Promise()` A promise.
 
@@ -328,14 +328,34 @@ The following Database maintenance tasks are available under the `db` namespace.
   api.db.prepopulate().then(function() {
     console.log('Done!');
   }).catch(function(err) {
-    console.error('An error occured', err);
+    console.error('An error occurred', err);
   });
 
-  // consume multiple units
-  api.consume('token', 5).then(function(remaining) {
-    console.log('Units remaining:', remaining);
+  ```
+  **[[⬆]](#TOC)**
+
+### <a name='maintenance-nuke'>Nuke the Database</a>
+
+  **WARNING** Irreversible purging of all data **WARNING**
+
+  That said, here's how to nuke the db for your testing purposes:
+
+  > ### api.db.nuke(confirm, confirmPrefix)
+  >
+  >    * **confirm** `string` A confirmation string.
+  >    * **confirmPrefix** `string` Confirm the defined prefix.
+  >
+  > *Returns* `Promise()` A promise.
+
+  The confirmation string is `Yes purge all records irreversably`
+
+  ```js
+  var api = kansas({prefix: 'test'});
+
+  api.db.nuke('Yes purge all records irreversably', 'test').then(function() {
+    console.log('Poof Gone!');
   }).catch(function(err) {
-    console.error('No more units!', err);
+    console.error('An error occurred', err);
   });
 
   ```
