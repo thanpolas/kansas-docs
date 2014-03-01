@@ -21,8 +21,16 @@
     1. [The Token Item](#tokens-item)
   1. [Kansas Middleware](#middleware)
   1. [Kansas Events](#events)
+  1. [Kansas Errors](#errors)
+    1. [Kansas BaseError](#errors-BaseError)
+    1. [Kansas Database](#errors-Database)
+    1. [Kansas Validation](#errors-Validation)
+    1. [Kansas TokenNotExists](#errors-TokenNotExists)
+    1. [Kansas UsageLimit](#errors-UsageLimit)
+    1. [How to work with Errors](#errors-howtowork)
   1. [Database Maintenance](#maintenance)
     1. [Prepopulating Usage Keys](#maintenance-prepopulate)
+    1. [Nuke the Database](#maintenance-nuke)
 
 ## <a name='configuration'>Configuration</a>
 
@@ -428,9 +436,82 @@ api.on('consume', function(token, consumed, remaining) {
 
 ```
 
+## <a name='errors'>Kansas Errors</a>
+
+Kansas *signs* all error Objects so you have a better chance of determining what went wrong. All error Constructors are exposed through the `api.error` namespace.
+
+### <a name='errors-BaseError'>api.error.BaseError</a>
+
+All Kansas errors inherit from this Class. BaseError provides these properties:
+
+* **srcError** `Error=` The original raw error instance may be stored in this property, i.e. errors produced by underlying libraries like the Redis Client.
+* **name** `string` The name identifying the error, default is `Kansas Error`.
+
+**[[⬆]](#TOC)**
+
+### <a name='errors-Database'>api.error.Database</a>
+
+Errors related to the Redis Database. Provides the following properties
+
+* **srcError** `Error=` The original raw error instance may be stored in this property, i.e. errors produced by underlying libraries like the Redis Client.
+* **name** `string` "Database Error"
+* **type** `kansas.error.Database.Type` an enum containing these values:
+  * `api.error.Database.Type.UNKNOWN` **unknown**
+  * `api.error.Database.Type.REDIS` **redis** Redis originated error.
+  * `api.error.Database.Type.REDIS_CONNECTION` **redisConnection** Redis connection error.
+
+**[[⬆]](#TOC)**
+
+### <a name='errors-Validation'>api.error.Validation</a>
+
+Validation errors. Provides the following properties
+
+* **name** `string` "Validation Error"  
+
+**[[⬆]](#TOC)**
+
+### <a name='errors-TokenNotExists'>api.error.TokenNotExists</a>
+
+Token does not exist error. Provides the following properties
+
+* **name** `string` "Token Not Exists Error"  
+
+**[[⬆]](#TOC)**
+
+### <a name='errors-UsageLimit'>api.error.UsageLimit</a>
+
+Usage limits errors. Provides the following properties
+
+* **name** `string` "Usage limit exceeded"  
+
+**[[⬆]](#TOC)**
+
+### <a name='errors-howtowork'>How to work with Errors</a>
+
+Use Javascript's `instanceof` to determine the type of error you received.
+
+```js
+var kansasError = api.error;
+
+api.consume('unique-token-id')
+  .then(onsuccess)
+  .catch(function(err) {
+    if (err instanceof kansasError.TokenNotExists) {
+      console.log('This token does not exist');
+    }
+    if (err instanceof kansasError.UsageLimit) {
+      console.log('Usage limit reached!');
+    }
+  });
+```
+
+**[[⬆]](#TOC)**
+
 ## <a name='maintenance'>Database Maintenance</a>
 
 The following Database maintenance tasks are available under the `db` namespace.
+
+**[[⬆]](#TOC)**
 
 ### <a name='maintenance-prepopulate'>Prepopulate Usage Keys</a>
 
