@@ -2,7 +2,7 @@
 
 *Token based rate limited API to go!*
 
-## <a name='TOC'>Table of Contents</a>
+## <a name='toc'>Table of Contents</a>
 
   1. [Configuration](#configuration)
   1. [Database Connection](#connect)
