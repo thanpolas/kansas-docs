@@ -53,6 +53,13 @@ api.setup({/* options */});
 * **logging** `boolean` *Optional* Set to `false` Mute all logging, default `true`.
 * **console** `boolean` *Optional* Set to `false` to not log to console, default `true`.
 * **logg** `logg` *Optional* Kansas uses the [logg](https://github.com/dpup/node-logg) package for logging, use this option to inject your own instance of *logg*.
+* **logLevel** `number` A value between 0 to 1000 with highest being more important. Kansas uses the following types of logging presented with their corresponding levels:
+  * `error` 1000
+  * `warn`   800
+  * `info`   600
+  * `fine`   400
+  * `finer`  200
+  * `finest` 100
 * **redis** `Object` *Optional* Redis connection options
   * **port** `string|number=` *Optional* Define redis port, default `6379`.
   * **host** `string=` *Optional* The host to connect to, default is `"localhost"`.
@@ -506,6 +513,66 @@ api.consume('unique-token-id')
 ```
 
 **[[⬆]](#TOC)**
+
+## <a name='logger'>Kansas Logging Facilities</a>
+
+Kansas uses the [node-logg package](https://github.com/dpup/node-logg) to perform logging. The following logging behavior can only be defined during instatiation:
+
+* **logging** `boolean` *Optional* Set to `false` Mute all logging, default `true`.
+* **console** `boolean` *Optional* Set to `false` to not log to console, default `true`.
+* **logg** `logg` *Optional* Kansas uses the [logg](https://github.com/dpup/node-logg) package for logging, use this option to inject your own instance of *logg*.
+* **logLevel** `number` A value between 0 to 1000 with highest being more important. Kansas uses the following types of logging presented with their corresponding levels:
+  * `error` 1000
+  * `warn`   800
+  * `info`   600
+  * `fine`   400
+  * `finer`  200
+  * `finest` 100
+
+
+```js
+var logg = require('logg');
+var kansas = require('kansas');
+
+var api = kansas({
+    logging: true,
+    console: false,
+    logg: logg,
+    level: 100,
+});
+```
+
+### <a name='logger-setLevel'>Setting Log verbocity</a>
+
+**[[⬆]](#TOC)**
+
+### <a name='logger-events'>Logging Events</a>
+
+All logging messages are emitted as events from kansas. The namespace to listen for is `message`:
+
+```js
+api.on('message', function(logObj) {
+    console.log('Log:', logObj);
+});
+```
+
+Here is a sample `logObj`:
+
+```js
+var logObj = {
+  level: 100,
+  name: 'cc.model.Token',
+  rawArgs: [ 'createActual() :: Init...' ],
+  date: 'Tue Apr 16 2013 18:29:52 GMT+0300 (EEST)',
+  message: 'createActual() :: Init...',
+};
+```
+
+
+**[[⬆]](#TOC)**
+
+
+
 
 ## <a name='maintenance'>Database Maintenance</a>
 
