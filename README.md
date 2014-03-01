@@ -307,6 +307,7 @@ api.consume('token', 5).then(function(remaining) {
 > ### api.getByOwnerId(ownerId)
 >
 >    * **ownerId** `string` A string uniquely identifying an owner.
+>
 > *Returns* `Promise(Array.<Object>)` A promise with an array of [tokenItems](#tokens-item).
 
 Will fetch all tokens based on Owner Id.
