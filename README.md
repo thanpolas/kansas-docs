@@ -21,6 +21,7 @@
   1. [Populating](#populating)
   1. [Database Maintenance](#maintenance)
     1. [Prepopulating Usage Keys](#maintenance-prepopulate)
+
 ## <a name='configuration'>Configuration</a>
 
   Kansas can be configured at instantiation or by using the `setup()` method.
