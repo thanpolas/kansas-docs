@@ -19,6 +19,7 @@
     1. [The Token Item](#tokens-item)
   1. [Managing Tokens](#managing-tokens)
   1. [Populating](#populating)
+  1. [Kansas Events](#events)
   1. [Database Maintenance](#maintenance)
     1. [Prepopulating Usage Keys](#maintenance-prepopulate)
 
@@ -297,6 +298,39 @@
   ```
 
   **[[⬆]](#TOC)**
+
+## <a name='events'>Kansas Events</a>
+
+You can hook for emitted events using the `on()` method. Kansas will emmit the following type of events:
+
+* **message** A logging message occurred.
+  * **logObj** `Object` The logging item object.
+* **create** A new Token was created
+  * **tokenItem** `Object` The created [Token Item](#tokens-item).
+* **delete**
+  * **tokenItem** `Object` The deleted [Token Item](#tokens-item).
+* **consume** A token was consumed.
+  * **token** `string` The token's unique id.
+  * **consumed** `number` Units consumed.
+  * **remaining** `number` How many units remaining.
+* **policyChange** An owner policy change has occurred.
+  * **changeObj** `Object` The Change object as passed, contains `ownerId` and `newPolicyName`.
+  * **policy** `Object` The new [Policy Item](#policies-item).
+* **maxTokens** An owner reached the maximum number of allowed tokens.
+  * **params** `Object` The params as passed, contain: `ownerId` and `policyName`.
+  * **maxTokens** `number` The maximum number of allowed tokens.
+
+How to hook on events
+
+```js
+var api = kansas();
+
+api.on('consume', function(token, consumed, remaining) {
+  console.log('Token:', token, ' Consumed:',
+    consumed, 'Remaining units:', remaining);
+});
+
+```
 
 ## <a name='maintenance'>Database Maintenance</a>
 
