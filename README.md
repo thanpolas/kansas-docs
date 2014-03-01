@@ -117,6 +117,9 @@
   });
   ```
 
+  **[[⬆]](#TOC)**
+
+
 ### <a name='policies-read'>Reading a Policy</a>
 
   > `api.policy.get(policyName)`
@@ -129,6 +132,8 @@
   var policyItem = api.policy.get('free');
   ```
 
+  **[[⬆]](#TOC)**
+
 ### <a name='policies-has'>Checking a Policy exists</a>
 
   > `api.policy.has(policyName)`
@@ -140,6 +145,8 @@
   ```js
   var policyExists = api.policy.has('free');
   ```
+
+  **[[⬆]](#TOC)**
 
 
 ### <a name='policies-change'>Change an Owner's policy</a>
@@ -170,20 +177,22 @@
 
 ### <a name='policies-item'>The Policy Item</a>
 
-When a policy item is returned from Kansas, this is the structure it will have:
+  When a policy item is returned from Kansas, this is the structure it will have:
 
-```js
-var policyItem = {
-  /** @type {string} The policy's name */
-  name: 'free',
-  /** @type {number} Maximum tokens per owner */
-  maxTokens: 3,
-  /** @type {number} Maximum usage units per period */
-  limit: 'free',
-  /** @type {kansas.model.PeriodBucket.Period} Period's enum */
-  period: 'month',
-};
-```
+  ```js
+  var policyItem = {
+    /** @type {string} The policy's name */
+    name: 'free',
+    /** @type {number} Maximum tokens per owner */
+    maxTokens: 3,
+    /** @type {number} Maximum usage units per period */
+    limit: 'free',
+    /** @type {kansas.model.PeriodBucket.Period} Period's enum */
+    period: 'month',
+  };
+  ```
+
+  **[[⬆]](#TOC)**
 
 ## <a name='tokens'>Tokens</a>
 
@@ -281,7 +290,7 @@ var policyItem = {
     period: 'month';
     /** @type {string} Any string uniquely identifying the owner */
     ownerId: 'hip';
-    /** @type {string} An [ISO 8601 formated date ](http://en.wikipedia.org/wiki/ISO_8601) */
+    /** @type {string} An ISO 8601 formated date */
     createdOn: '2014-03-01T18:12:15.711Z';
   };
   ```
@@ -293,19 +302,32 @@ var policyItem = {
 The following Database maintenance tasks are available under the `db` namespace.
 
 ### <a name='maintenance-prepopulate'>Prepopulate Usage Keys</a>
-  > `api.consume(token, optUnits)`
-  >
-  >    * **token** `string` The token to consume.
-  >    * **optUnits=** `number` *Optional* Optionally define how many units to consume.
-  > *Returns* `Promise(remaining)` A promise returning the remaining units a *number*.
 
-  Will consume a unit and return the remaining units.
+  **TL;DR** You need to run the `kansas.db.prepopulate()` method once per month to populate the next month's usage keys.
+
+  Consuming units is the most repeatedly invoked method of Kansas, thus certain performance restrictions apply. In order to have blazing fast speeds the *Consume* operation has been reduced to a single database call, `DECR`.
+
+  In order for this to happen Kansas creates new keys with the limit as value. i.e. a Kansas usage key can be:
+
+  ```
+  kansas:usage:2014-02-01:token-unique-id = 10
+  ```
+
+  That way Kansas can calculate the key to perform the `DECR` op given the `token` and the current date.
+
+  Each time a token is created Kansas will populate the usage keys for the current period (month) and the next period (month). By design there is no built-in way to prepopulate the usage keys with each passing month. This operation can potentially be very costly and you should have the responsibility and control of when and where it's run.
+
+  > `api.db.prepopulate()`
+  >
+  > *Returns* `Promise()` A promise.
+
+  Run once each month to populate the usage keys for the  next month.
 
   ```js
-  api.consume('token').then(function(remaining) {
-    console.log('Units remaining:', remaining);
+  api.db.prepopulate().then(function() {
+    console.log('Done!');
   }).catch(function(err) {
-    console.error('No more units!', err);
+    console.error('An error occured', err);
   });
 
   // consume multiple units
