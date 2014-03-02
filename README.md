@@ -518,10 +518,10 @@ api.consume('unique-token-id')
 
 Kansas uses the [node-logg package](https://github.com/dpup/node-logg) to perform logging. The following logging behavior can only be defined during instatiation:
 
-* **logging** `boolean` *Optional* Set to `false` Mute all logging, default `true`.
-* **console** `boolean` *Optional* Set to `false` to not log to console, default `true`.
-* **logg** `logg` *Optional* Kansas uses the [logg](https://github.com/dpup/node-logg) package for logging, use this option to inject your own instance of *logg*.
-* **logLevel** `number` A value between 0 to 1000 with highest being more important. Kansas uses the following types of logging presented with their corresponding levels:
+* **logging** `boolean=` *Optional* Set to `false` to mute all logging, default `true`.
+* **console** `boolean=` *Optional* Set to `false` to not log to console, default `true`.
+* **logg** `logg=` *Optional* Kansas uses the [logg](https://github.com/dpup/node-logg) package for logging, use this option to inject your own instance of *logg*.
+* **logLevel** `number=` *Optional* A value between 0 to 1000 with highest being more important. Kansas uses the following types of logging presented with their corresponding levels:
   * `error` 1000
   * `warn`   800
   * `info`   600
@@ -541,8 +541,6 @@ var api = kansas({
     level: 100,
 });
 ```
-
-### <a name='logger-setLevel'>Setting Log verbocity</a>
 
 **[[⬆]](#TOC)**
 
@@ -568,11 +566,7 @@ var logObj = {
 };
 ```
 
-
 **[[⬆]](#TOC)**
-
-
-
 
 ## <a name='maintenance'>Database Maintenance</a>
 
