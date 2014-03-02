@@ -99,11 +99,12 @@ var kansas = require('kansas');
 
 var api = kansas();
 
-api.connect().then(function() {
-  console.log('Connected!');
-}).catch(function(err){
-  console.error('Opts, something went wrong:', err);
-});
+api.connect()
+  .then(function() {
+    console.log('Connected!');
+  }).catch(function(err){
+    console.error('Opts, something went wrong:', err);
+  });
 ```
 **[[⬆]](#TOC)**
 
@@ -181,11 +182,12 @@ You'll typically use this when an owner upgrades or downgrades to a new plan. Be
 api.policy.change({
   ownerId: 'a-unique-id'
   policyName: 'basic',
-}).then(function() {
-  console.log('It Worked!');
-}).catch(function(err) {
-  console.error('Uhhhhh duh?', err);
-});
+})
+  .then(function() {
+    console.log('It Worked!');
+  }).catch(function(err) {
+    console.error('Uhhhhh duh?', err);
+  });
 ```
 
 
@@ -230,12 +232,13 @@ Creates a tokens and populates usage keys and indexes.
 api.create({
   ownerId: 'a-unique-id'
   policyName: 'basic',
-}).then(function(tokenItem) {
-  console.log('It Worked!', tokenItem);
-  console.log('Here is the token:', tokenItem.token);
-}).catch(function(err) {
-  console.error('OH NO!', err);
-});
+})
+  .then(function(tokenItem) {
+    console.log('It Worked!', tokenItem);
+    console.log('Here is the token:', tokenItem.token);
+  }).catch(function(err) {
+    console.error('OH NO!', err);
+  });
 ```
 
 > This method has [Before / After Middleware](#middleware).
@@ -255,12 +258,12 @@ Will fetch a token.
 
 ```js
 api.get('unique-token-id')
-.then(function(tokenItem) {
-  console.log('It Worked!', tokenItem);
-  console.log('Here is the token:', tokenItem.token);
-}).catch(function(err) {
-  console.error('OH NO!', err);
-});
+  .then(function(tokenItem) {
+    console.log('It Worked!', tokenItem);
+    console.log('Here is the token:', tokenItem.token);
+  }).catch(function(err) {
+    console.error('OH NO!', err);
+  });
 ```
 > This method has [Before / After Middleware](#middleware).
 
@@ -277,11 +280,11 @@ Will delete a token.
 
 ```js
 api.del('unique-token-id')
-.then(function() {
-  console.log('Token Deleted!');
-}).catch(function(err) {
-  console.error('OH NO!', err);
-});
+  .then(function() {
+    console.log('Token Deleted!');
+  }).catch(function(err) {
+    console.error('OH NO!', err);
+  });
 ```
 > This method has [Before / After Middleware](#middleware).
 
@@ -292,26 +295,28 @@ api.del('unique-token-id')
 > ### api.consume(token, optUnits)
 >
 >    * **token** `string` The token to consume.
->    * **optUnits=** `number` *Optional* Optionally define how many units to consume.
+>    * **optUnits==** `number=` *Optional* Optionally define how many units to consume.
 > *Returns* `Promise(remaining)` A promise returning the remaining units a *number*.
 
 Will consume a unit and return the remaining units.
 
 ```js
-api.consume('token').then(function(remaining) {
-  console.log('Units remaining:', remaining);
-}).catch(function(err) {
-  console.error('No more units!', err);
-});
+api.consume('token')
+  .then(function(remaining) {
+    console.log('Units remaining:', remaining);
+  }).catch(function(err) {
+    console.error('No more units!', err);
+  });
 
 // consume multiple units
-api.consume('token', 5).then(function(remaining) {
-  console.log('Units remaining:', remaining);
-}).catch(function(err) {
-  console.error('No more units!', err);
-});
-
+api.consume('token', 5)
+  .then(function(remaining) {
+    console.log('Units remaining:', remaining);
+  }).catch(function(err) {
+    console.error('No more units!', err);
+  });
 ```
+
 > This method has [Before / After Middleware](#middleware).
 
 **[[⬆]](#TOC)**
@@ -329,11 +334,11 @@ Will fetch all tokens based on Owner Id.
 
 ```js
 api.getByOwnerId('hip')
-.then(function(tokens) {
-  console.log('Total Tokens:', tokens.length);
-}).catch(function(err) {
-  console.error('OH NO!', err);
-});
+  .then(function(tokens) {
+    console.log('Total Tokens:', tokens.length);
+  }).catch(function(err) {
+    console.error('OH NO!', err);
+  });
 ```
 
 > This method has [Before / After Middleware](#middleware).
