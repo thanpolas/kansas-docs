@@ -1,77 +1,41 @@
 # The Redis Store Schema
 
-Redis is the main data store for Kansas. 
+Redis is the main data store for Kansas.
 
-## Tokens Store
+## Tokens Keys
 
 * **Type** [Hash][redis hash]
 * **Path** [prefix]:kansas:token:[token]
 * **Indexes** `ownerId`
+* **Value** `Object` (a hash)
 
-#### Properties
+```
+test:kansas:token:dsakj3nfbsDeTFK1s12rpLKsMcyTE4sW
+```
 
-* `string` **token** Unique id.
-* `string` **policyId** The policy id.
-* `string` **ownerId** Arbitrary string that identifies the owner.
-* `string` **createdOn** Date in ISO 8601 Extended Format.
+## Usage Keys
 
-## Policies Store
-
-* **Type** [Hash][redis hash]
-* **Path** [prefix]:kansas:policy:[id]
-* **Indexes** none
-
-#### Properties
-
-* `string` **id** Unique id.
-* `string` **name** Policy name.
-* `integer` **maxTokens** Maximum number of tokens.
-* `integer` **limit** Maximum requests limit per given period (now only month).
-* `string` **createdOn** Date in ISO 8601 Extended Format.
-
-
-## Usage Store
-
-* **Type** [Hash][redis hash]
+* **Type** [Strings][redis string]
 * **Path** [prefix]:kansas:usage:[yyyy-mm]:[token]
 * **Indexes** none.
+* **Value** `number` A number representing usage units left.
 
-#### Properties
-
-* `string` **token** Unique id.
-* `string` **policyId** The policy id.
-* `integer` **usage** Number of times used (gets increased on each request).
-* `integer` **maxApps** Maximum number of apps.
-* `integer` **maxTokensPerApp** Maximum tokens per app.
-* `integer` **requestLimit** Maximum requests limit per given period (now only month).
-* `string` **ownerId** Arbitrary string that identifies the owner.
-* `string` **createdOn** Date in ISO 8601 Extended Format.
+```
+test:kansas:usage:2014-03-01:dsakj3nfbsDeTFK1s12rpLKsMcyTE4sW
+```
 
 ## Indexes
 
-Indexes, where mentioned, are created atomically using [the plain *String*][redis string] key/value store type, with the Index as key and the store's unique id as value.
+Indexes are created atomically using [the plain *String*][redis string] key/value store type, with the Index as key and the store's unique id as value.
 
-* **Type** [String][redis string]
-* **Path** [prefix]:kansas:index:token:[indexId]
-
-The `token` part is literraly the string *token* and represents that this is an index of the Tokens store. `indexId` is the value that was stored in the item.
-
-For example for this token record:
-
-```json
-{
-    "token": "abc",
-    "ownerId": "1"
-
-}
-```
-
-This key/value index record would be created:
+* **Type** [Set][redis set]
+* **Path** [prefix]:kansas:index:[index]
+* **Value** `string` The token
 
 ```
-kansas:index:token:1 --> "abc"
+test:kansas:index:token:owner-unique-id
 ```
 
 [redis string]: http://redis.io/commands#string
+[redis set]: http://redis.io/commands#set
 [redis hash]: http://redis.io/commands#hash
-
