@@ -223,10 +223,11 @@ var policyItem = {
 >    * **options** `Object` A dictionary with the following key/value pairs:
 >      * **ownerId** `string` The owner's id.
 >      * **policyName** `string` The new policy.
+>      * **token** `string=` *Optional* Define a custom token name.
 >
 > *Returns* `Promise(tokenItem)` A promise returning the [*tokenItem* an *Object*](#tokens-item).
 
-Creates a tokens and populates usage keys and indexes.
+Creates a token and populates usage keys and indexes.
 
 ```js
 api.create({
