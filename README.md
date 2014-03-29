@@ -602,6 +602,8 @@ The following Database maintenance tasks are available under the `db` namespace.
 
   Run once each month to populate the usage keys for the  next month.
 
+  > The `db.prepopulate()` method is safe to run multiple times, the effect will be to overwrite any existing next months records. They haven't been consumed so the operation has no effect to your accounting.
+
   ```js
   api.db.prepopulate().then(function() {
     console.log('Done!');
