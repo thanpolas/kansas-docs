@@ -39,13 +39,13 @@ Kansas can be configured at instantiation or by using the `setup()` method.
 ```js
 var kansas = require('kansas');
 
-var api = kansas({/* options */});
+exports.kansas = kansas({/* options */});
 
 // this will work too
-api.setup({/* options */});
+exports.kansas.setup({/* options */});
 ```
 
-> **NOTICE** Logging options are an exception and can **only** be set during instantiation
+> **NOTICE** Logging options cannot be set using the `setup()` method. They can **only** be set during instantiation.
 
 ### Available Options
 
@@ -72,12 +72,12 @@ api.setup({/* options */});
 ```js
 var kansas = require('kansas');
 
-var api = kansas({
+exports.kansas = kansas({
     // don't log to console
     console: false,
 });
 
-api.setup({
+exports.kansas.setup({
     port: 7777,
     host: 'some.redis.host.com',
     password: 'secret',
@@ -88,7 +88,7 @@ api.setup({
 
 ## <a name='connect'>Connecting to Redis</a>
 
-> ### api.connect() No arguments.
+> ### kansas.connect() No arguments.
 >
 > *Returns* `Promise` A Promise.
 
@@ -97,9 +97,9 @@ Before you start a connection Kansas will refuse to perform any task. Connecting
 ```js
 var kansas = require('kansas');
 
-var api = kansas();
+exports.kansas = kansas();
 
-api.connect()
+exports.kansas.connect()
   .then(function() {
     console.log('Connected!');
   }).catch(function(err){
@@ -115,7 +115,7 @@ api.connect()
 
 ### <a name='policies-creating'>Creating policies</a>
 
-> ### api.policy.create(options)
+> ### kansas.policy.create(options)
 >
 >    * **options** `Object` A dictionary with the following options.
 >       * **name** `string` The policy's name, uniquely identifying it.
@@ -127,7 +127,7 @@ api.connect()
 To create a policy you need to define three parameters:
 
 ```js
-api.policy.create({
+kansas.policy.create({
   name: 'free',
   maxTokens: 3, // max tokens per owner
   limit: 100 // max usage units per period
@@ -139,28 +139,28 @@ api.policy.create({
 
 ### <a name='policies-read'>Reading a Policy</a>
 
-> ### api.policy.get(policyName)
+> ### kansas.policy.get(policyName)
 >
 >    * **policyName** `string` The policy name to fetch.
 >
 > *Returns* `Object` [The Policy Item](#policies-item).
 
 ```js
-var policyItem = api.policy.get('free');
+var policyItem = kansas.policy.get('free');
 ```
 
 **[[⬆]](#TOC)**
 
 ### <a name='policies-has'>Checking a Policy exists</a>
 
-> ### api.policy.has(policyName)
+> ### kansas.policy.has(policyName)
 >
 >    * **policyName** `string` The policy name to fetch.
 >
 > *Returns* `boolean` Yes or no.
 
 ```js
-var policyExists = api.policy.has('free');
+var policyExists = kansas.policy.has('free');
 ```
 
 **[[⬆]](#TOC)**
@@ -168,7 +168,7 @@ var policyExists = api.policy.has('free');
 
 ### <a name='policies-change'>Change an Owner's policy</a>
 
-> ### api.policy.change(options)
+> ### kansas.policy.change(options)
 >
 >    * **options** `Object` A dictionary with the following key/value pairs:
 >      * **ownerId** `string` The owner's id.
@@ -179,7 +179,7 @@ var policyExists = api.policy.has('free');
 You'll typically use this when an owner upgrades or downgrades to a new plan. Beware, the usage units will reset to the Policy's limits.
 
 ```js
-api.policy.change({
+kansas.policy.change({
   ownerId: 'a-unique-id'
   policyName: 'basic',
 })
@@ -216,9 +216,9 @@ var policyItem = {
 
 ### <a name='creating-tokens'>Creating Tokens</a>
 
-> ### api.create(options)
+> ### kansas.create(options)
 >
-> `api.create` is an alias to `api.set`
+> `kansas.create` is an alias to `kansas.set`
 >
 >    * **options** `Object` A dictionary with the following key/value pairs:
 >      * **ownerId** `string` The owner's id.
@@ -230,7 +230,7 @@ var policyItem = {
 Creates a token and populates usage keys and indexes.
 
 ```js
-api.create({
+kansas.create({
   ownerId: 'a-unique-id'
   policyName: 'basic',
 })
@@ -249,7 +249,7 @@ api.create({
 
 ### <a name='get-tokens'>Fetching Tokens</a>
 
-> ### api.get(token)
+> ### kansas.get(token)
 >
 >    * **token** `string` The token's string.
 > *Returns* `Promise(tokenItem)` A promise returning the [*tokenItem* an *Object*](#tokens-item).
@@ -258,7 +258,7 @@ Will fetch a token.
 
 
 ```js
-api.get('unique-token-id')
+kansas.get('unique-token-id')
   .then(function(tokenItem) {
     console.log('It Worked!', tokenItem);
     console.log('Here is the token:', tokenItem.token);
@@ -272,7 +272,7 @@ api.get('unique-token-id')
 
 ### <a name='del-tokens'>Deleting Tokens</a>
 
-> ### api.del(token)
+> ### kansas.del(token)
 >
 >    * **token** `string` The token's string.
 > *Returns* `Promise()` A promise.
@@ -280,7 +280,7 @@ api.get('unique-token-id')
 Will delete a token.
 
 ```js
-api.del('unique-token-id')
+kansas.del('unique-token-id')
   .then(function() {
     console.log('Token Deleted!');
   }).catch(function(err) {
@@ -293,7 +293,7 @@ api.del('unique-token-id')
 
 ### <a name='consuming-tokens'>Consuming Tokens</a>
 
-> ### api.consume(token, optUnits)
+> ### kansas.consume(token, optUnits)
 >
 >    * **token** `string` The token to consume.
 >    * **optUnits==** `number=` *Optional* Optionally define how many units to consume.
@@ -302,7 +302,7 @@ api.del('unique-token-id')
 Will consume a unit and return the remaining units.
 
 ```js
-api.consume('token')
+kansas.consume('token')
   .then(function(remaining) {
     console.log('Units remaining:', remaining);
   }).catch(function(err) {
@@ -310,7 +310,7 @@ api.consume('token')
   });
 
 // consume multiple units
-api.consume('token', 5)
+kansas.consume('token', 5)
   .then(function(remaining) {
     console.log('Units remaining:', remaining);
   }).catch(function(err) {
@@ -325,7 +325,7 @@ api.consume('token', 5)
 
 ### <a name='getByOwnerId-tokens'>Fetch Tokens By Owner Id</a>
 
-> ### api.getByOwnerId(ownerId)
+> ### kansas.getByOwnerId(ownerId)
 >
 >    * **ownerId** `string` A string uniquely identifying an owner.
 >
@@ -334,7 +334,7 @@ api.consume('token', 5)
 Will fetch all tokens based on Owner Id.
 
 ```js
-api.getByOwnerId('hip')
+kansas.getByOwnerId('hip')
   .then(function(tokens) {
     console.log('Total Tokens:', tokens.length);
   }).catch(function(err) {
@@ -375,25 +375,25 @@ var tokenItem = {
 
 Kansas uses the [Middlewarify package](https://github.com/thanpolas/middlewarify) to apply the middleware pattern to its methods. More specifically the [Before/After type of middleware](https://github.com/thanpolas/middlewarify#using-the-before--after-middleware-type) has been applied to the following methods:
 
-  * api.set()
-  * api.get()
-  * api.del()
-  * api.consume()
-  * api.getByOwnerId()
-  * api.policy.change()
+  * kansas.set()
+  * kansas.get()
+  * kansas.del()
+  * kansas.consume()
+  * kansas.getByOwnerId()
+  * kansas.policy.change()
 
 Each of these methods has the Before/After methods so you can add corresponding middleware. All middleware get the same arguments, all *After* middleware receive an extra argument which is the result of the main middleware resolution.
 
 ```js
-api.set.before(function(params) {
+kansas.set.before(function(params) {
   console.log(params.ownerId); // prints 'hip'
 });
 
-api.set.after(function(params, tokenItem) {
+kansas.set.after(function(params, tokenItem) {
   console.log(tokenItem.token); // the generated token
 });
 
-api.create({
+kansas.create({
   ownerId: 'hip',
   policyName: 'free',
 });
@@ -402,7 +402,7 @@ api.create({
 To pass control asynchronously from a middleware you need to return a Promise:
 
 ```js
-api.set.before(function(params) {
+kansas.set.before(function(params) {
   return new Promise(function(resolve, reject) {
     performAsyncFunction(function(err) {
         if (err) { return reject(err); }
@@ -440,9 +440,7 @@ You can hook for emitted events using the `on()` method. Kansas will emmit the f
 How to hook on events
 
 ```js
-var api = kansas();
-
-api.on('consume', function(token, consumed, remaining) {
+kansas.on('consume', function(token, consumed, remaining) {
   console.log('Token:', token, ' Consumed:',
     consumed, 'Remaining units:', remaining);
 });
@@ -451,9 +449,9 @@ api.on('consume', function(token, consumed, remaining) {
 
 ## <a name='errors'>Kansas Errors</a>
 
-Kansas *signs* all error Objects so you have a better chance of determining what went wrong. All error Constructors are exposed through the `api.error` namespace.
+Kansas *signs* all error Objects so you have a better chance of determining what went wrong. All error Constructors are exposed through the `kansas.error` namespace.
 
-### <a name='errors-BaseError'>api.error.BaseError</a>
+### <a name='errors-BaseError'>kansas.error.BaseError</a>
 
 All Kansas errors inherit from this Class. BaseError provides these properties:
 
@@ -462,20 +460,20 @@ All Kansas errors inherit from this Class. BaseError provides these properties:
 
 **[[⬆]](#TOC)**
 
-### <a name='errors-Database'>api.error.Database</a>
+### <a name='errors-Database'>kansas.error.Database</a>
 
 Errors related to the Redis Database. Provides the following properties
 
 * **srcError** `Error=` The original raw error instance may be stored in this property, i.e. errors produced by underlying libraries like the Redis Client.
 * **name** `string` "Database Error"
 * **type** `kansas.error.Database.Type` an enum containing these values:
-  * `api.error.Database.Type.UNKNOWN` **unknown**
-  * `api.error.Database.Type.REDIS` **redis** Redis originated error.
-  * `api.error.Database.Type.REDIS_CONNECTION` **redisConnection** Redis connection error.
+  * `kansas.error.Database.Type.UNKNOWN` **unknown**
+  * `kansas.error.Database.Type.REDIS` **redis** Redis originated error.
+  * `kansas.error.Database.Type.REDIS_CONNECTION` **redisConnection** Redis connection error.
 
 **[[⬆]](#TOC)**
 
-### <a name='errors-Validation'>api.error.Validation</a>
+### <a name='errors-Validation'>kansas.error.Validation</a>
 
 Validation errors. Provides the following properties
 
@@ -483,7 +481,7 @@ Validation errors. Provides the following properties
 
 **[[⬆]](#TOC)**
 
-### <a name='errors-TokenNotExists'>api.error.TokenNotExists</a>
+### <a name='errors-TokenNotExists'>kansas.error.TokenNotExists</a>
 
 Token does not exist error. Provides the following properties
 
@@ -491,7 +489,7 @@ Token does not exist error. Provides the following properties
 
 **[[⬆]](#TOC)**
 
-### <a name='errors-UsageLimit'>api.error.UsageLimit</a>
+### <a name='errors-UsageLimit'>kansas.error.UsageLimit</a>
 
 Usage limits errors. Provides the following properties
 
@@ -504,15 +502,13 @@ Usage limits errors. Provides the following properties
 Use Javascript's `instanceof` to determine the type of error you received.
 
 ```js
-var kansasError = api.error;
-
-api.consume('unique-token-id')
+kansas.consume('unique-token-id')
   .then(onsuccess)
   .catch(function(err) {
-    if (err instanceof kansasError.TokenNotExists) {
+    if (err instanceof kansas.error.TokenNotExists) {
       console.log('This token does not exist');
     }
-    if (err instanceof kansasError.UsageLimit) {
+    if (err instanceof kansas.error.UsageLimit) {
       console.log('Usage limit reached!');
     }
   });
@@ -540,7 +536,7 @@ Kansas uses the [node-logg package](https://github.com/dpup/node-logg) to perfor
 var logg = require('logg');
 var kansas = require('kansas');
 
-var api = kansas({
+exports.kansas = kansas({
     logging: true,
     console: false,
     logg: logg,
@@ -555,7 +551,7 @@ var api = kansas({
 All logging messages are emitted as events from kansas. The namespace to listen for is `message`:
 
 ```js
-api.on('message', function(logObj) {
+kansas.on('message', function(logObj) {
     console.log('Log:', logObj);
 });
 ```
@@ -596,7 +592,7 @@ The following Database maintenance tasks are available under the `db` namespace.
 
   Each time a token is created Kansas will populate the usage keys for the current period (month) and the next period (month). By design there is no built-in way to prepopulate the usage keys with each passing month. This operation can potentially be very costly and you should have the responsibility and control of when and where it's run.
 
-  > ### api.db.prepopulate()
+  > ### kansas.db.prepopulate()
   >
   > *Returns* `Promise()` A promise.
 
@@ -605,7 +601,7 @@ The following Database maintenance tasks are available under the `db` namespace.
   > The `db.prepopulate()` method is safe to run multiple times, the effect will be to overwrite any existing next months records. They haven't been consumed so the operation has no effect to your accounting.
 
   ```js
-  api.db.prepopulate().then(function() {
+  kansas.db.prepopulate().then(function() {
     console.log('Done!');
   }).catch(function(err) {
     console.error('An error occurred', err);
@@ -620,7 +616,7 @@ The following Database maintenance tasks are available under the `db` namespace.
 
   That said, here's how to nuke the db for your testing purposes:
 
-  > ### api.db.nuke(confirm, confirmPrefix)
+  > ### kansas.db.nuke(confirm, confirmPrefix)
   >
   >    * **confirm** `string` A confirmation string.
   >    * **confirmPrefix** `string` Confirm the defined prefix.
@@ -630,9 +626,9 @@ The following Database maintenance tasks are available under the `db` namespace.
   The confirmation string is `Yes purge all records irreversably`
 
   ```js
-  var api = kansas({prefix: 'test'});
+  var kansas = kansas({prefix: 'test'});
 
-  api.db.nuke('Yes purge all records irreversably', 'test').then(function() {
+  kansas.db.nuke('Yes purge all records irreversably', 'test').then(function() {
     console.log('Poof Gone!');
   }).catch(function(err) {
     console.error('An error occurred', err);
