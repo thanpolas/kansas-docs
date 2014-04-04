@@ -111,7 +111,7 @@ exports.kansas.connect()
 
 ## <a name='policies'>Policies</a>
 
-  Policies are stored in memory. After many iterations it became apparent that this is the most efficient way to work with policies. You define and maintain them inside your application, they are shared between multiple cores and exist in the memory saving on needless database reads. After all, typically an application is not expected to have more than 10 policies.
+  Policies are stored in memory. After many iterations it became apparent that this is the most efficient way to work with policies. You define and maintain them inside your application, they are shared between multiple cores and stored in memory, saving on needless database reads.
 
 ### <a name='policies-creating'>Creating policies</a>
 
@@ -120,17 +120,38 @@ exports.kansas.connect()
 >    * **options** `Object` A dictionary with the following options.
 >       * **name** `string` The policy's name, uniquely identifying it.
 >       * **maxTokens** `number` Maximum number of tokens each owner is allowed to have.
->       * **limit** `number` The maximum number of API calls (units) per period.
+>       * **limit** `number=` The maximum number of API calls (units) per period.
+>       * **count** `boolean=` Make this a Count Policy.
 >
 > *Returns* `Object` [The Policy Item](#policies-item).
 
-To create a policy you need to define three parameters:
+There are two types of policies that you can create, the Consume Policy and the Count Policy.
+
+#### The Consume Policy Type
+
+The consuming policies have a finite number of total API calls that can be made within the given period. Each API call consumes one unit from this pool. When all units have been consumed Kansas will deny access to the resource.
+
+To create a Consume Policy you need to define the following parameters:
 
 ```js
 kansas.policy.create({
   name: 'free',
   maxTokens: 3, // max tokens per owner
   limit: 100 // max usage units per period
+});
+```
+
+#### The Count Policy Type
+
+The counting policies have no limit to usage, their only purpose is to count how many API calls where performed. Each new period starts the API usage counter from 0 (zero).
+
+To create a counting policy you just need to turn the `count` switch on and omit the `limit` attribute:
+
+```js
+kansas.policy.create({
+  name: 'enterprise',
+  maxTokens: 10,
+  count: true,
 });
 ```
 
@@ -203,8 +224,10 @@ var policyItem = {
   name: 'free',
   /** @type {number} Maximum tokens per owner */
   maxTokens: 3,
-  /** @type {number} Maximum usage units per period */
-  limit: 'free',
+  /** @type {number=} Maximum usage units per period */
+  limit: 10,
+  /** @type {boolean=} Make this a Count Policy */
+  count: false,
   /** @type {kansas.model.PeriodBucket.Period} Period's enum */
   period: 'month',
 };
