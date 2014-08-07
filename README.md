@@ -394,6 +394,8 @@ var tokenItem = {
   policyName: 'free',
   /** @type {number} The usage limit per period */
   limit: 10;
+  /** @type {boolean} Indicates the token is a 'count' type */
+  count: false;
   /** @type {kansas.model.PeriodBucket.Period} The period */
   period: 'month';
   /** @type {string} Any string uniquely identifying the owner */
