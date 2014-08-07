@@ -13,13 +13,15 @@
     1. [Change Owner's Policy](#policies-change)
     1. [The Policy Item](#policies-item)
   1. [Tokens](#tokens)
-    1. [Creating Tokens](#creating-tokens)
-    1. [Fetching Tokens](#get-tokens)
-    1. [Deleting Tokens](#del-tokens)
-    1. [Consuming Tokens](#consuming-tokens)
-    1. [Getting Usage](#count-tokens)
-    1. [Fetch By Owner Id](#getByOwnerId-tokens)
-    1. [The Token Item](#tokens-item)
+    1. [Creating Tokens](#creating-tokens) Create a token item.
+    1. [Fetching Tokens](#get-tokens) Get a token item.
+    1. [Deleting Tokens](#del-tokens) Delete a token item.
+    1. [Consuming Tokens](#consuming-tokens) Decrease units from a defined limit.
+    1. [Counting Tokens](#count-tokens) Add units starting from 1.
+    1. [Fetch By Owner Id](#getByOwnerId-tokens) Get all token items for the provided owner id.
+    1. [Get Token Usage](#getUsage) Get the usage items of a token for the current period.
+    1. [Get Usage by Owner](#getUsageByOwnerId) Get all the token items including usage items for the current period.
+    1. [The Token Item](#tokens-item) A break out of the token item data object.
   1. [Kansas Middleware](#middleware)
   1. [Kansas Events](#events)
   1. [Kansas Errors](#errors)
@@ -379,6 +381,31 @@ kansas.getByOwnerId('hip')
 ```
 
 > This method has [Before / After Middleware](#middleware).
+
+**[[⬆]](#TOC)**
+
+### <a name='getUsage'>Get Token Usage</a>
+
+> ### kansas.getUsage(tokenId, optTokenItem)
+>
+>    * **tokenId** `string` The token id to query.
+>    * **optTokenItem** `Object=` Optionally provide the token item if it is available.
+>
+> *Returns* `Promise(number)` A promise with a number representing the units consumed for the given token.
+
+Get the usage items of a token for the current period.
+
+**[[⬆]](#TOC)**
+
+### <a name='getUsageByOwnerId'>Get Usage by Owner</a>
+
+> ### kansas.getUsageByOwnerId(ownerId)
+>
+>    * **ownerId** `string` A string uniquely identifying an owner.
+>
+> *Returns* `Promise(Array.<Object>)` A promise with an array of [tokenItems](#tokens-item) which are augmented with the `usage` property, a number representing the units used.
+
+Get all the token items including usage items for the current period.
 
 **[[⬆]](#TOC)**
 
