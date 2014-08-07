@@ -24,6 +24,17 @@ test:kansas:token:dsakj3nfbsDeTFK1s12rpLKsMcyTE4sW
 test:kansas:usage:2014-03-01:dsakj3nfbsDeTFK1s12rpLKsMcyTE4sW
 ```
 
+## Count Keys
+
+* **Type** [Strings][redis string]
+* **Path** [prefix]:kansas:usage:[yyyy-mm]:count:[token]
+* **Indexes** none.
+* **Value** `number` A number representing units used.
+
+```
+test:kansas:usage:2014-03-01:count:dsakj3nfbsDeTFK1s12rpLKsMcyTE4sW
+```
+
 ## Indexes
 
 Indexes are created atomically using [the plain *String*][redis string] key/value store type, with the Index as key and the store's unique id as value.
