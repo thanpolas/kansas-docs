@@ -17,6 +17,7 @@
     1. [Fetching Tokens](#get-tokens)
     1. [Deleting Tokens](#del-tokens)
     1. [Consuming Tokens](#consuming-tokens)
+    1. [Getting Usage](#count-tokens)
     1. [Fetch By Owner Id](#getByOwnerId-tokens)
     1. [The Token Item](#tokens-item)
   1. [Kansas Middleware](#middleware)
@@ -311,6 +312,18 @@ kansas.del('unique-token-id')
   });
 ```
 > This method has [Before / After Middleware](#middleware).
+
+**[[⬆]](#TOC)**
+
+### <a name='count-tokens'>Adding up Tokens</a>
+
+> ### kansas.count(token, optUnits)
+>
+>    * **token** `string` The token to consume.
+>    * **optUnits==** `number=` *Optional* Optionally define how many units to consume.
+> *Returns* `Promise(used)` A promise returning the used units a *number*.
+
+Will add up a consume unit and return how many units were used.
 
 **[[⬆]](#TOC)**
 
