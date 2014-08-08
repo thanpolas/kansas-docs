@@ -397,18 +397,6 @@ Get the usage items of a token for the current period.
 
 **[[⬆]](#TOC)**
 
-### <a name='getUsageByOwnerId'>Get Usage by Owner</a>
-
-> ### kansas.getUsageByOwnerId(ownerId)
->
->    * **ownerId** `string` A string uniquely identifying an owner.
->
-> *Returns* `Promise(Array.<Object>)` A promise with an array of [tokenItems](#tokens-item) which are augmented with the `usage` property, a number representing the units used.
-
-Get all the token items including usage items for the current period.
-
-**[[⬆]](#TOC)**
-
 ### <a name='tokens-item'>The Token Item</a>
 
 When a Token item is returned from Kansas, this is the structure it will have:
@@ -429,6 +417,14 @@ var tokenItem = {
   ownerId: 'hip';
   /** @type {string} An ISO 8601 formated date */
   createdOn: '2014-03-01T18:12:15.711Z';
+
+  /** @type {number}  How many units were consumed in this perdiod */
+  // This attribute is only available if the item is of type 'count'
+  consumed: 10,
+
+  /** @type {number}  How many units remain in this perdiod */
+  // This attribute is only available if the item is of type 'limit'
+  remaining: 10,
 };
 ```
 
