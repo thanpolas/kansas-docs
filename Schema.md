@@ -16,7 +16,7 @@ test:kansas:token:dsakj3nfbsDeTFK1s12rpLKsMcyTE4sW
 ## Usage Keys
 
 * **Type** [Strings][redis string]
-* **Path** [prefix]:kansas:usage:[yyyy-mm]:[token]
+* **Path** [prefix]:kansas:usage:[yyyy-mm-dd]:[token]
 * **Indexes** none.
 * **Value** `number` A number representing usage units left.
 
@@ -27,7 +27,7 @@ test:kansas:usage:2014-03-01:dsakj3nfbsDeTFK1s12rpLKsMcyTE4sW
 ## Count Keys
 
 * **Type** [Strings][redis string]
-* **Path** [prefix]:kansas:usage:[yyyy-mm]:count:[token]
+* **Path** [prefix]:kansas:usage:[yyyy-mm-dd]:count:[token]
 * **Indexes** none.
 * **Value** `number` A number representing units used.
 
