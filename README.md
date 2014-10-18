@@ -684,12 +684,12 @@ The following Database maintenance tasks are available under the `db` namespace.
   >
   > *Returns* `Promise()` A promise.
 
-  The confirmation string is `Yes purge all records irreversably`
+  The confirmation string is `Yes purge all records irreversibly`
 
   ```js
   var kansas = kansas({prefix: 'test'});
 
-  kansas.db.nuke('Yes purge all records irreversably', 'test').then(function() {
+  kansas.db.nuke('Yes purge all records irreversibly', 'test').then(function() {
     console.log('Poof Gone!');
   }).catch(function(err) {
     console.error('An error occurred', err);
