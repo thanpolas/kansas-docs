@@ -37,7 +37,7 @@ test:kansas:usage:2014-03-01:count:dsakj3nfbsDeTFK1s12rpLKsMcyTE4sW
 
 ## Indexes
 
-Indexes are created atomically using [the plain *String*][redis string] key/value store type, with the Index as key and the store's unique id as value.
+Indexes are created atomically using [the Redis SET][redis set] key/value store type, with the Index as key and the store's unique id as value.
 
 * **Type** [Set][redis set]
 * **Path** [prefix]:kansas:index:[index]
