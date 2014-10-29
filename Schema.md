@@ -13,6 +13,21 @@ Redis is the main data store for Kansas.
 test:kansas:token:dsakj3nfbsDeTFK1s12rpLKsMcyTE4sW
 ```
 
+The schema of the Token Item hash:
+
+```json
+{
+  "token": "MsIzyODD3ecEQpAqDh8zC1Zva9kZ7I7k",
+  "policyName": "free",
+  "limit": "10",
+  "count": "0",
+  "period": "month",
+  "ownerId": "hip",
+  "createdOn": "2014-10-29T16:19:28.214Z"
+}
+```
+
+
 ## Usage Keys
 
 * **Type** [Strings][redis string]
