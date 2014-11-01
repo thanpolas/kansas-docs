@@ -2,6 +2,12 @@
 
 *Token based rate limited API to go!*
 
+## Related Packages
+
+* [Kansas](https://github.com/thanpolas/kansas) The main library.
+* [Kansas Express](https://github.com/thanpolas/kansas-express) Express middleware for Kansas.
+* [Kansas Metrics](https://github.com/thanpolas/kansas-metrics) Metrics utilities for the Kansas package.
+
 ## <a name='TOC'>Table of Contents</a>
 
   1. [Configuration](#configuration)
